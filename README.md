@@ -22,6 +22,7 @@ var processes = await client.GetProcessesAsync();
 ```
 
 ## References
+* [BonitasRestClient] (https://github.com/michaelbarnes/BonitasRestClient.Net)
 * [Bonitasoft](http://www.bonitasoft.com/) 
 * [Bonitasoft Api Documentation](http://documentation.bonitasoft.com/?page=_rest-api) 
 * [RestSharp](http://restsharp.org/)
