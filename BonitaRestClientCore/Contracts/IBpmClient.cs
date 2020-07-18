@@ -14,10 +14,22 @@ namespace BonitasRestClient.Contracts
         Case GetCase(string caseId);
         Task<IList<Case>> GetCasesAsync(String filter);
         IList<Case> GetCases(String filter);
+
+        Task<Case> GetArchivedCaseAsync(string caseId);
+        Case GetArchivedCase(string caseId);
+        Task<IList<Case>> GetArchivedCasesAsync(String filter);
+        IList<Case> GetArchivedCases(String filter);
+
         Task<Models.Task> GetTaskAsync(long TaskeId);
         Models.Task GetTask(long TaskeId);
         Task<IList<Models.Task>> GetTasksAsync(String filter);
         IList<Models.Task> GetTasks(String filter);
+
+        Task<Models.Task> GetHumanTaskAsync(long TaskeId);
+        Models.Task GetHumanTask(long TaskeId);
+        Task<IList<Models.Task>> GetHumanTasksAsync(String filter);
+        IList<Models.Task> GetHumanTasks(String filter);
+
         Task<Process> GetProcessAsync(string processId);
         Process GetProcess(string processId);
         Task<IList<Process>> GetProcessesAsync(String filter);

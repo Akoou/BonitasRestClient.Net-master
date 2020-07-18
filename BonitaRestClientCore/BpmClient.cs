@@ -255,7 +255,33 @@ namespace BonitasRestClient
             {
                 var response = HandleResponse<string>(_RestClient.Execute(request));
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                Logout();
+            }
+        }
+
+        public async Task Assigned(long taskId, long? userId)
+        {
+            Login();
+
+            JObject values = JObject.Parse("{\"assigned_id\":\""+userId+"\"}");
+
+            var request = new RestRequest(_ApiResource + "/humanTask/{id}", Method.PUT)
+                .AddCookies(_Cookies);
+            request.AddParameter("id", taskId, ParameterType.UrlSegment);
+            request.AddHeader("X-Bonita-API-Token", _Cookies.FirstOrDefault(i=>i.Name== "X-Bonita-API-Token").Value);
+            request.AddJsonBody(values.ToString());
+
+            try
+            {
+                var response = HandleResponse<string>(_RestClient.Execute(request));
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -474,6 +500,130 @@ namespace BonitasRestClient
         public IList<User> GetUsers(String filter = "p=0&c=10")
         {
             return GetUsersAsync(filter).Result;
+        }
+
+        public Task<Case> GetArchivedCaseAsync(string caseId)
+        {
+            Login();
+
+            var request = new RestRequest(_ApiResource + "/archivedCase/" + caseId, Method.GET)
+                .AddCookies(_Cookies)
+                .Execute(_RestClient);
+
+            Models.Case caseModels = null;
+
+            try
+            {
+                caseModels = HandleResponse<Models.Case>(request);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                Logout();
+            }
+
+            return Task.FromResult(caseModels);
+        }
+
+        public Case GetArchivedCase(string caseId)
+        {
+            return GetArchivedCaseAsync(caseId).Result;
+        }
+
+        public Task<IList<Case>> GetArchivedCasesAsync(string filter)
+        {
+            Login();
+
+            var request = new RestRequest(_ApiResource + "/archivedCase?" + filter, Method.GET)
+                .AddCookies(_Cookies)
+                .Execute(_RestClient);
+
+            IList<Case> caseModels = null;
+
+            try
+            {
+                caseModels = HandleResponse<IList<Case>>(request);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                Logout();
+            }
+
+            return Task.FromResult(caseModels);
+        }
+
+        public IList<Case> GetArchivedCases(string filter)
+        {
+            return GetArchivedCasesAsync(filter).Result;
+        }
+
+        public Task<Models.Task> GetHumanTaskAsync(long TaskeId)
+        {
+            Login();
+
+            var request = new RestRequest(_ApiResource + "/humanTask/{id}", Method.GET)
+                .AddCookies(_Cookies);
+            request.AddParameter("id", TaskeId, ParameterType.UrlSegment);
+
+            Models.Task task = null;
+
+            try
+            {
+                task = HandleResponse<Models.Task>(_RestClient.Execute(request));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                Logout();
+            }
+
+            return Task.FromResult(task);
+        }
+
+        public Models.Task GetHumanTask(long TaskeId)
+        {
+            return GetHumanTaskAsync(TaskeId).Result;
+        }
+
+        public Task<IList<Models.Task>> GetHumanTasksAsync(string filter)
+        {
+            Login();
+
+            var request = new RestRequest(_ApiResource + "/humanTask?" + filter, Method.GET)
+                .AddCookies(_Cookies)
+                .Execute(_RestClient);
+
+            IList<Models.Task>  taskModels = null;
+
+            try
+            {
+                taskModels = HandleResponse<IList<Models.Task>>(request);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                Logout();
+            }
+
+            return Task.FromResult(taskModels);
+        }
+
+        public IList<Models.Task> GetHumanTasks(string filter)
+        {
+            return GetHumanTasksAsync(filter).Result;
         }
     }
 }
